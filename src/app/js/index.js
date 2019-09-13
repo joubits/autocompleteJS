@@ -12,8 +12,9 @@ async function searchStates(search) {
     const data = await state.getState(search);
     // Show the states
     ui.outputHTML(data);
-    // Events in list of states div
+    // Events (click, mouseover, mouseout) in each div of list of states
     ui.stateSelectedEvents();
+    // Initialize the i counter in UI
     ui.initializateCounter();
 }
 
