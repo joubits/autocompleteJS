@@ -6,46 +6,29 @@ import appStyles from '../styles/app.scss';
 
 const ui = new UI();
 const state = new State();
-// counter for down-up key
-let i; // counter
 
 // Search States
 async function searchStates(search) {
     const data = await state.getState(search);
-    // insert in div search
-    const matchList = ui.outputHTML(data);
-    // events in matchlist div
-    ui.stateSelectedEvents(matchList);
-}
-
-const pressKeyDownUp = (e) => {
-    const statesSelected = document.querySelectorAll('.match-list div');
-    //statesLength = statesSelected.length
-    if (e.keyCode==40) {
-        selected = statesSelected[i].target;
-        ui.addActive(selected)
-        search.value = statesSelected[i].innerHTML;
-    } 
-    else if (e.keyCode == 38) {
-        selected = statesSelected[i].target;
-        ui.removeActive(selected);
-        search.value = statesSelected[i].innerHTML;
-    }
-    else if (e.keyCode == 13) {
-        search.value = statesSelected[i-1].innerHTML;
-        matchList.innerHTML = '';
-
-    }
+    // Show the states
+    ui.outputHTML(data);
+    // Events in list of states div
+    ui.stateSelectedEvents();
+    ui.initializateCounter();
 }
 
 
 // Add new functionality WebkitSpeechRecognition (You can talk and it displays results in search input)
 //document.addEventListener('DOMContentLoaded', ui.setVoiceRecognition);
 
-// Begin to press a key
+// Begin to enter data input
 search.addEventListener('input', () => searchStates(search.value) );
-// Presskey
-//search.addEventListener('keydown', (e) => { pressKeyDownUp(e); });
+// Press UpDownkey
+search.addEventListener('keydown', (e) => { ui.pressedDownUp(e); });
+// When clicked outside remove match list
+document.addEventListener("click", () =>  ui.clearMatchList() );
+
+/* UI Functions */
 // When click in X clean the input
 ui.clearInput();
 

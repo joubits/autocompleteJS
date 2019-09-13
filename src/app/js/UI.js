@@ -2,6 +2,7 @@ export class UI {
     constructor() {
         this.search = document.getElementById('search');
         this.matchList = document.getElementById('match-list');
+        this.i;
     }
     setVoiceRecognition() {
         window.SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
@@ -20,7 +21,7 @@ export class UI {
                 interimTranscript += transcript;
             }
             }
-            this.search.value = finalTranscript + interimTranscript;
+            search.value = finalTranscript + interimTranscript;
         }
         recognition.start();
     }
@@ -44,7 +45,6 @@ export class UI {
             if(states.length>=10){
                 states = states.slice(1,11);  
             }
-            //console.log("Output HTML into the div matchlist: " , states);
             const statediv = states.map(
                 state => `
                 <div>${state.name}</div>
@@ -54,39 +54,71 @@ export class UI {
         } else {
             this.matchList.innerHTML = "";
         }
-        return this.matchList;
     }
     // each state event
-    stateSelectedEvents(matchList) {
+    stateSelectedEvents() {
         const statesSelected = document.querySelectorAll('.match-list div');
         for(let i=0; i<statesSelected.length; i++){
             // OnClick event
             statesSelected[i].addEventListener('click', (e) => {
-                let selected = statesSelected[i];
-                this.addActive(selected);
-                this.search.value = selected.innerHTML;
+                statesSelected[i].classList.add('active');
+                this.search.value = statesSelected[i].innerHTML;
                 // remove list of states
-                matchList.innerHTML = '';
+                this.matchList.innerHTML = '';
             });
             // Mouseover
             statesSelected[i].addEventListener('mouseover', (e) => { 
-                let selected = statesSelected[i];
-                this.addActive(selected);
+                statesSelected[i].classList.add('active');
             });
             // MouseOut
             statesSelected[i].addEventListener('mouseout', (e) => { 
-                let selected = statesSelected[i];
-                this.removeActive(selected);
+                let statediv = e.target;
+                statediv.classList.remove('active');
             });
         }
     }
 
-    // Add active
-    addActive(selected) {
-        selected.classList.add('active');
+    initializateCounter() {
+        this.i = -1;
     }
-    // Remove Active
-    removeActive(selected) {
-        selected.classList.remove('active');
+
+    pressedDownUp(e) {
+        const statesSelected = document.querySelectorAll('.match-list div');
+        // Down key
+        if (e.keyCode==40) {
+            this.i++;
+            this.addActive(statesSelected);
+            //console.log(this.i);
+        } // Up key
+        else if (e.keyCode == 38) {
+            this.i--;
+            this.addActive(statesSelected);
+        } // Enter key
+        else if (e.keyCode == 13) {
+            search.value = statesSelected[this.i].innerHTML;
+            this.matchList.innerHTML = '';
+    
+        }
+    }
+
+    addActive(statesSelected) {
+        if(!statesSelected) return false;
+        this.removeActive(statesSelected);
+
+        if (this.i >= statesSelected.length) this.i = 0;
+        if (this.i < 0) this.i = (statesSelected.length - 1);
+        
+        statesSelected[this.i].classList.add('selected');
+        search.value = statesSelected[this.i].innerHTML;
+    }
+
+    removeActive(statesSelected) {
+        statesSelected.forEach( state => {
+            state.classList.remove('selected');
+        });
+    }
+
+    clearMatchList() {
+        this.matchList.innerHTML = '';
     }
 }

@@ -5,6 +5,7 @@ html {
 	font-weight: normal;
 	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 	background: #000;
+	font-size: 14px;
 }
 
 main {
@@ -46,6 +47,9 @@ main {
 		border-bottom: 1px solid #d4d4d4;
 		&.active {
 			background-color: #ccc;
+		}
+		&.selected {
+			background-color: darkseagreen;
 		}
 	}
 }
