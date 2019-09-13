@@ -58,24 +58,24 @@ export class UI {
     // each state event
     stateSelectedEvents() {
         const statesSelected = document.querySelectorAll('.match-list div');
-        for(let i=0; i<statesSelected.length; i++){
+        statesSelected.forEach( (state) => {
             // OnClick event
-            statesSelected[i].addEventListener('click', (e) => {
-                statesSelected[i].classList.add('active');
-                this.search.value = statesSelected[i].innerHTML;
+            state.addEventListener('click', () => {
+                state.classList.add('active');
+                this.search.value = state.innerHTML;
                 // remove list of states
                 this.matchList.innerHTML = '';
             });
             // Mouseover
-            statesSelected[i].addEventListener('mouseover', (e) => { 
-                statesSelected[i].classList.add('active');
+            state.addEventListener('mouseover', () => {
+                state.classList.add('active');
+                
             });
             // MouseOut
-            statesSelected[i].addEventListener('mouseout', (e) => { 
-                let statediv = e.target;
-                statediv.classList.remove('active');
+            state.addEventListener('mouseout', (e) => { 
+                state.classList.remove('active');
             });
-        }
+        } );
     }
 
     initializateCounter() {
